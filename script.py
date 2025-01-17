@@ -57,9 +57,21 @@ def store_movies(movies):
             print(f"Film ajouté : {movie_details['Titre']}")
         else:
             print(f"Film déjà existant : {movie_details['Titre']}")
-            
+
 # Fonction pour lister tous les films dans la base de données
 def list_all_movies():
     movies = collection.find()
     for movie in movies:
         print(f"Titre: {movie['Titre']}, Année: {movie['Année']}, ID_IMDb: {movie['ID_IMDb']}")
+
+
+# Fonction pour afficher les détails d'un film spécifique
+def show_movie_details(imdb_id):
+    movie = collection.find_one({"ID_IMDb": imdb_id})
+    if movie:
+        print("Détails du film :")
+        for key, value in movie.items():
+            if key != "_id":
+                print(f"{key}: {value}")
+    else:
+        print("Aucun film trouvé avec cet ID IMDb.")
