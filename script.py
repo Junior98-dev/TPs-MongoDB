@@ -75,3 +75,31 @@ def show_movie_details(imdb_id):
                 print(f"{key}: {value}")
     else:
         print("Aucun film trouvé avec cet ID IMDb.")
+
+# Menu principal
+def main():
+    while True:
+        print("\n--- Menu ---")
+        print("1. Rechercher et stocker des films")
+        print("2. Lister tous les films")
+        print("3. Afficher les détails d'un film")
+        print("4. Quitter")
+
+        choice = input("Choisissez une option : ")
+        if choice == "1":
+            keyword = input("Entrez un mot-clé pour rechercher des films : ")
+            movies = search_movies(keyword)
+            store_movies(movies)
+        elif choice == "2":
+            list_all_movies()
+        elif choice == "3":
+            imdb_id = input("Entrez l'ID IMDb du film : ")
+            show_movie_details(imdb_id)
+        elif choice == "4":
+            print("Au revoir !")
+            break
+        else:
+            print("Option invalide. Veuillez réessayer.")
+
+if __name__ == "__main__":
+    main()
