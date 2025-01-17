@@ -27,3 +27,33 @@ def search_movies(keyword):
     else:
         print("Erreur lors de la requête API OMDb.")
         return []
+    
+# Fonction pour stocker les films dans MongoDB
+def store_movies(movies):
+    for movie in movies:
+        movie_details = {
+            "Titre": movie.get('Title'),
+            "Année": movie.get('Year'),
+            "ID_IMDb": movie.get('imdbID'),
+            "Genre": None,  # Récupération détaillée plus tard
+            "Réalisateur": None,
+            "Acteurs": None,
+            "Synopsis": None
+        }
+
+        # Récupérer des détails supplémentaires sur chaque film
+        details_url = f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={movie['imdbID']}"
+        details_response = requests.get(details_url)
+        if details_response.status_code == 200:
+            details_data = details_response.json()
+            movie_details["Genre"] = details_data.get('Genre')
+            movie_details["Réalisateur"] = details_data.get('Director')
+            movie_details["Acteurs"] = details_data.get('Actors')
+            movie_details["Synopsis"] = details_data.get('Plot')
+
+        # Vérification avant insertion pour éviter les doublons
+        if not collection.find_one({"ID_IMDb": movie_details['ID_IMDb']}):
+            collection.insert_one(movie_details)
+            print(f"Film ajouté : {movie_details['Titre']}")
+        else:
+            print(f"Film déjà existant : {movie_details['Titre']}")
