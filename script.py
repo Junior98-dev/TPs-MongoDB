@@ -14,7 +14,6 @@ db = client[DATABASE_NAME]
 collection = db[COLLECTION_NAME]
 
 # Fonction pour rechercher des films via l'API OMDb
-keyword = input("Entrez le titre de votre film : ")
 def search_movies(keyword):
     url = f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&s={keyword}"
     response = requests.get(url)
@@ -28,5 +27,3 @@ def search_movies(keyword):
     else:
         print("Erreur lors de la requête API OMDb.")
         return []
-
-search_movies({keyword})
