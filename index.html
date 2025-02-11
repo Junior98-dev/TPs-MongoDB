@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des Hôtels</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .hotel-container { display: flex; flex-wrap: wrap; justify-content: center; }
+        .hotel { border: 1px solid #ddd; border-radius: 10px; padding: 10px; margin: 10px; width: 250px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
+        .hotel img { width: 100%; border-radius: 10px; }
+        .hotel h3 { margin: 10px 0; }
+        .hotel p { margin: 5px 0; color: #555; }
+    </style>
+</head>
+<body>
+
+    <h1>Liste des Hôtels Disponibles</h1>
+    <div class="hotel-container" id="hotel-list"></div>
+
+    <script>
+        async function fetchHotels() {
+            try {
+                let response = await fetch('http://localhost:5000/hotels');
+                let hotels = await response.json();
+                let hotelList = document.getElementById('hotel-list');
+                hotelList.innerHTML = '';
+
+                hotels.forEach(hotel => {
+                    let hotelCard = document.createElement('div');
+                    hotelCard.classList.add('hotel');
+                    hotelCard.innerHTML = `
+                        <img src="${hotel.image}" alt="${hotel.nom}">
+                        <h3>${hotel.nom}</h3>
+                        <p>Ville: ${hotel.ville}</p>
+                        <p>Prix: ${hotel.prix} € / nuit</p>
+                    `;
+                    hotelList.appendChild(hotelCard);
+                });
+            } catch (error) {
+                console.error("Erreur lors du chargement des hôtels :", error);
+            }
+        }
+
+        // Charger les hôtels au chargement de la page
+        window.onload = fetchHotels;
+    </script>
+
+</body>
+</html>
